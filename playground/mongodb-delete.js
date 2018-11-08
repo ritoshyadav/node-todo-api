@@ -23,6 +23,10 @@ db.collection('Todos').findOneAndDelete({text: 'Something to do'}).then((result)
 })  ;
 
 
-
+// findOneAnddelete
+db.collection('Todos').findOneAndDelete({_id: new ObjectID('5be455673b5f532604c74299')
+ }).then((result) =>{
+    console.log(JSON.stringify(result, undefined, 2));
+})  ;
 
 });
