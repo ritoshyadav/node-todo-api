@@ -1,7 +1,10 @@
 
 var mongoose =require('mongoose');
 
-var Todo = mongoose.model('Todo', {
+// const Schema = mongoose.Schema;
+
+// const TodoSchema =new Schema({
+var Todo = mongoose.model('todo',{
     text: {
         type: String,
         required: true,
@@ -17,5 +20,7 @@ var Todo = mongoose.model('Todo', {
         default: null
     }
 });
+
+
 
 module.exports = {Todo}
