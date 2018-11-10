@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const validator= require('validator');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
+
 var UserSchema = new mongoose.Schema({
     email:{
         type: String,
@@ -50,6 +51,28 @@ UserSchema.methods.generateAuthToken = function () {
         return token;
     });
 };
+
+UserSchema.statics.findByToken = function (token) {
+    var User = this;
+    var decoded;
+    var fUser;
+
+    try{
+        decoded = jwt.verify(token, 'abc123');
+        console.log('====== hello in schema')
+    }catch (e) {
+        return Promise.reject();
+
+    }
+    return User.findOne({
+        // fuser= User.findOne({
+        '_id': decoded._id,
+        'tokens.token': token,
+        'tokens.access':'auth'
+    }); 
+    // consloe.log(token)
+    // consloe.log(fUser)
+}; 
 
 var User = mongoose.model('User',UserSchema);
 
