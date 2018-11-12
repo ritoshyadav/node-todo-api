@@ -107,29 +107,43 @@ app.patch('/todos/:id',(req, res) => {
 
 
 
-    //POST  /USER
-    app.post('/user',(req, res) =>{
-       var body= _.pick(req.body,['email','password']);
-       var user = new User(body);
-     
-       user.save().then(() => {
+//POST  /USER
+app.post('/user',(req, res) =>{
+    var body= _.pick(req.body,['email','password']);
+    var user = new User(body);
+    
+    user.save().then(() => {
 
-    //    console.log("==========Finish")
-    //    console.log(user.generateAuthToken())
-        return user.generateAuthToken();
-        //    res.send(user);
-       }).then((token) => {
-           res.header('x-auth',token).send(user);
-       }).catch((e)=>{
-           res.status(400).send(e);
-       })
+//    console.log("==========Finish")
+//    console.log(user.generateAuthToken())
+    return user.generateAuthToken();
+    //    res.send(user);
+    }).then((token) => {
+        res.header('x-auth',token).send(user);
+    }).catch((e)=>{
+        res.status(400).send(e);
+    })
+});
+
+
+
+app.get('/user/me', authenticate,  (req, res) =>{
+    res.send(req.user);
+});
+
+app.post('/user/login',(req,res)=>{
+    var body=_.pick(req.body,['email','password']);
+    //res.send(body);
+
+    console.log ("a========aj")
+    User.findByCredentials(body.email, body.password).then((user) => {
+        console.log("=================result")
+        res.send(user);
+    }).catch((e) => {
+        res.status(400).send();
     });
+});
 
-
-
-    app.get('/user/me', authenticate,  (req,res) =>{
-        res.send(req.user);
-    });
 
 app.listen(port,() =>{
     console.log(`Started on port ${port}`);

@@ -175,4 +175,77 @@ describe('PATCH /todos/:id', () =>{
                 .end(done)
             });
     });
+// describe('GET /user/me', ()=>{
+//     it('should return user if authenticated',(done) =>{
+//         request(app)
+//         .get('/user/me')
+//         .set('x-auth', users[0].tokens[0].token)
+//         .expect(200)
+//         .expect((res) =>{
+//             expect(res.body._id).toBe(users[0]._id.toHexString());
+//             expect(res.body.email).toBe(users[0].email);
+//             console.log(users[0].tokens[0].token);
+//         })
+//         .end(done);
+//     });
 
+//     it('should return 401 if not authenticated',(done) => {
+//         request(app)
+//         .get('/user/me')
+//         .expect(401)
+//         .expect((res) =>{
+//             expect(res.body).toEqual({});
+//         })
+//         .end(done);
+//     });
+// });
+
+// describe('POST / user',() =>{
+//     it('should create a user', (done)=>{
+//         var email ='example@gmail.com';
+//         var password = '123mnb!';
+
+//         request(app)
+//         .post('/user')
+//         .send({email,password})
+//         .expect(200)
+//         .expect((res) => {
+//             // expect(res.headers['x-auth']).toExist();
+//             // expect(res.body._id).toExist();
+//             expect(res.body.email).toBe(email);
+//         })
+//         .end((err) =>{
+//             if(err){
+//                 return done(err);
+//             }
+//             User.findOne({email}).then((user) =>{
+//                 expect(user).toExist();
+//                 expect(user.password).toBe(password);
+//                 done();
+//             });
+//         });
+//     });
+
+//     it('should retrun validation errors if request invalid',(done) =>{
+//         request(app)
+//         .post('/user')
+//         .send({
+//             email: 'and',
+//             password: '123'
+//         })
+//         .expect(400)
+//         .end(done);
+//     });
+
+//     it('should not create user if email in use',(done) => {
+//         request(app)
+//         .post('/user')
+//         .send({
+//             email : users[0].email,
+//             password :' password123!'
+//         })
+//         .expect(400)
+//         .end(done);
+//     });
+// });
+ 
