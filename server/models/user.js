@@ -5,7 +5,7 @@ const validator= require('validator');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const bcrypt = require('bcryptjs');
-
+const promise = require('Promise');
 
 
 var UserSchema = new mongoose.Schema({
@@ -78,6 +78,28 @@ UserSchema.statics.findByToken = function (token) {
     // consloe.log(fUser)
 }; 
 
+UserSchema.statics.findByCredentials = function(email, password){
+    var User = this;
+console.log("a--------adjhkajbckj")
+    return User.findOne({email}).then((user)=>{
+       if(!user){
+           return Promise.reject();
+       }
+       return new Promise((resolve, reject) =>{
+           bcrypt.compare(password, user.password,(err, res) =>{
+               
+               if(!res){
+                   reject(); 
+               }else{
+                 // console.log("============",user)
+                  resolve(user);
+               }
+           });
+       });
+   });
+};
+
+
 UserSchema.pre('save', function(next){
     var user = this;
 
@@ -93,27 +115,6 @@ UserSchema.pre('save', function(next){
     }
 });
 
-UserSchema.statics.findByCredentials = function(email, password){
-     var User = this;
-console.log("a--------adjhkajbckj")
-     User.findOne({email}).then((user)=>{
-        if(!user){
-            return Promise.reject();
-        }
-       // return new Promise((resolve, reject) =>{
-            bcrypt.compare(password, user.password,(err, res) =>{
-                
-                if(res){
-                    console.log("============",user)
-                    return Promise.resolve(user);
-                  resolve(user);
-                }else{
-                   reject(); 
-                }
-            });
-        //});
-    });
-};
 
 var User = mongoose.model('User',UserSchema);
 
