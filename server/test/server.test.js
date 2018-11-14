@@ -174,7 +174,7 @@ describe('PATCH /todos/:id', () =>{
                 })
                 .end(done)
             });
-    });
+    }); 
 // describe('GET /user/me', ()=>{
 //     it('should return user if authenticated',(done) =>{
 //         request(app)
@@ -184,7 +184,7 @@ describe('PATCH /todos/:id', () =>{
 //         .expect((res) =>{
 //             expect(res.body._id).toBe(users[0]._id.toHexString());
 //             expect(res.body.email).toBe(users[0].email);
-//             console.log(users[0].tokens[0].token);
+//             // console.log(users[0].tokens[0].token);
 //         })
 //         .end(done);
 //     });
@@ -247,5 +247,54 @@ describe('PATCH /todos/:id', () =>{
 //         .expect(400)
 //         .end(done);
 //     });
-// });
+
+
+describe('POST /user/login', ()=>{
+    it('should login user and return auth token', (done)=>{
+        request(app)
+        .post('/user/login')
+        .send({
+            email: users[1].email,
+            password: users[1].password
+        })
+        .expect(200)
+        .expect((res) => {
+           // expect(res.header['x-auth']).toExist();
+        })
+        .end((err ,res) =>{
+            if(err){
+                return done(err);
+            }
+            User.findById(users[1]._id).then((user) =>{
+                expect(user.tokens[0]).toInclude({
+                    access:'auth',
+                    token:res.header['x-auth']
+                });
+                done(); 
+            }).catch((e) => done(e));
+        });
+    });
+
+    it('should reject invalid login', (done) =>{
+        request(app)
+        .post('/user/login')
+        .send({
+            email: users[1].email,
+            password: users[1].password +'1'
+        })
+        .expect(200)
+        .expect((res) => {
+           // expect(res.header['x-auth']).toNotExist();
+        })
+        .end((err ,res) =>{
+            if(err){
+                return done(err);
+            }
+            User.findById(users[1]._id).then((user) =>{
+                expect(user.tokens.length).toBe(0);
+                done(); 
+            }).catch((e) => done(e));
+        });
+    });
+});
  
